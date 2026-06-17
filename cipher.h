@@ -29,5 +29,11 @@ public:
     std::string encrypt(const std::string& text) override;
     std::string decrypt(const std::string& text) override;
 };
+class AtbashCipher : public Cipher {
+public:
+    AtbashCipher();
+    std::string encrypt(const std::string& text) override;
+    std::string decrypt(const std::string& text) override;
+};
 
 #endif // CIPHER_H
