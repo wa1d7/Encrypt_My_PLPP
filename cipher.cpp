@@ -107,3 +107,47 @@ std::string AtbashCipher::encrypt(const std::string& text) {
 std::string AtbashCipher::decrypt(const std::string& text) {
     return encrypt(text);
 }
+
+#include "include/cipher_api.h"
+#include <cstring>
+
+extern "C" {
+
+EXPORT cipher_t* cipher_create_caesar(int key) {
+    return (cipher_t*) new CaesarCipher(key);
+}
+
+EXPORT cipher_t* cipher_create_vigenere(const char* key) {
+    return (cipher_t*) new VigenereCipher(std::string(key));
+}
+
+EXPORT char* cipher_encrypt(cipher_t* cipher, const char* text) {
+
+    Cipher* c = (Cipher*) cipher;
+
+    std::string result = c->encrypt(std::string(text));
+
+    char* c_str = new char[result.length() + 1];
+    std::strcpy(c_str, result.c_str());
+    return c_str;
+}
+
+EXPORT char* cipher_decrypt(cipher_t* cipher, const char* text) {
+    Cipher* c = (Cipher*) cipher;
+    std::string result = c->decrypt(std::string(text));
+
+    char* c_str = new char[result.length() + 1];
+    std::strcpy(c_str, result.c_str());
+    return c_str;
+}
+
+EXPORT void cipher_destroy(cipher_t* cipher) {
+    Cipher* c = (Cipher*) cipher;
+    delete c;
+}
+
+EXPORT void cipher_free(char* str) {
+    delete[] str;
+}
+
+}

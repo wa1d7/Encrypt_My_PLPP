@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Encrypt main.cpp
         cipher.cpp
         cipher.h
+        include/cipher_api.h
 )
