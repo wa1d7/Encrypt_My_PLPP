@@ -120,6 +120,9 @@ EXPORT cipher_t* cipher_create_caesar(int key) {
 EXPORT cipher_t* cipher_create_vigenere(const char* key) {
     return (cipher_t*) new VigenereCipher(std::string(key));
 }
+EXPORT cipher_t* cipher_create_atbash() {
+    return (cipher_t*) new AtbashCipher();
+}
 
 EXPORT char* cipher_encrypt(cipher_t* cipher, const char* text) {
 
