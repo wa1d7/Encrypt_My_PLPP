@@ -72,3 +72,49 @@ unique_ptr<Line> ChecklistLine::clone() const {
 void ChecklistLine::toggle() {
     checked = !checked;
 }
+
+string TextLine::serialize() const {
+    return "TEXT:" + text;
+}
+
+string ContactLine::serialize() const {
+    return "CONTACT:" + name + "|" + surname + "|" + email;
+}
+
+string ChecklistLine::serialize() const {
+    return "CHECKLIST:" + to_string(checked ? 1 : 0) + "|" + item;
+}
+
+unique_ptr<Line> Line::deserialize(const string& data) {
+    size_t colon_pos = data.find(':');
+    if (colon_pos == string::npos) {
+        return make_unique<TextLine>(data);
+    }
+
+    string type = data.substr(0, colon_pos);
+    string payload = data.substr(colon_pos + 1);
+
+    if (type == "TEXT") {
+        return make_unique<TextLine>(payload);
+    }
+    else if (type == "CONTACT") {
+        size_t first_pipe = payload.find('|');
+        size_t second_pipe = payload.find('|', first_pipe + 1);
+
+        if (first_pipe != string::npos && second_pipe != string::npos) {
+            string n = payload.substr(0, first_pipe);
+            string s = payload.substr(first_pipe + 1, second_pipe - first_pipe - 1);
+            string e = payload.substr(second_pipe + 1);
+            return make_unique<ContactLine>(n, s, e);
+        }
+    }
+    else if (type == "CHECKLIST") {
+        size_t pipe_pos = payload.find('|');
+        if (pipe_pos != string::npos) {
+            bool c = (payload.substr(0, pipe_pos) == "1");
+            string i = payload.substr(pipe_pos + 1);
+            return make_unique<ChecklistLine>(i, c);
+        }
+    }
+    return make_unique<TextLine>(data);
+}
