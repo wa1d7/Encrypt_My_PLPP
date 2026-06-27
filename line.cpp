@@ -49,3 +49,26 @@ bool TextLine::contains(const string& query, size_t& pos) const {
     pos = text.find(query, pos);
     return pos != string::npos;
 }
+ContactLine::ContactLine(const string& n, const string& s, const string& e)
+    : name(n), surname(s), email(e) {}
+void ContactLine::print() const {
+    cout << "Contact - " << name << " " << surname
+         << ", E-mail: " << email << endl;
+}
+
+unique_ptr<Line> ContactLine::clone() const {
+    return make_unique<ContactLine>(name, surname, email);
+}
+
+ChecklistLine::ChecklistLine(const string& i, bool c) : item(i), checked(c) {}
+
+void ChecklistLine::print() const {
+    cout << "[ " << (checked ? "x" : " ") << " ] " << item << endl;
+}
+
+unique_ptr<Line> ChecklistLine::clone() const {
+    return make_unique<ChecklistLine>(item, checked);
+}
+void ChecklistLine::toggle() {
+    checked = !checked;
+}

@@ -37,5 +37,23 @@ public:
     std::string extract(int char_idx, int count) const override;
     bool contains(const std::string& query, size_t& pos) const override;
 };
+class ContactLine : public Line {
+    std::string name;
+    std::string surname;
+    std::string email;
+public:
+    ContactLine(const std::string& n, const std::string& s, const std::string& e);
+    void print() const override;
+    std::unique_ptr<Line> clone() const override;
+};
 
+class ChecklistLine : public Line {
+    std::string item;
+    bool checked;
+public:
+    ChecklistLine(const std::string& i, bool c);
+    void print() const override;
+    std::unique_ptr<Line> clone() const override;
+    void toggle();
+};
 #endif
