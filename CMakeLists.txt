@@ -7,4 +7,6 @@ add_executable(Encrypt main.cpp
         cipher.cpp
         cipher.h
         include/cipher_api.h
+        line.cpp
+        line.h
 )
