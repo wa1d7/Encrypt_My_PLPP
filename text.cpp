@@ -64,9 +64,53 @@ const Line* Text::getLine(int idx) const {
     return nullptr;
 }
 
-void Text::appendText(const string& new_text) {}
-void Text::insertText(int line_idx, int char_idx, const string& insert_str) {}
-void Text::insertReplaceText(int line_idx, int char_idx, const string& insert_str) {}
-void Text::deleteText(int line_idx, int char_idx, int char_count) {}
-void Text::searchText(const string& search_str) const {}
-string Text::copyText(int line_idx, int char_idx, int count) const { return ""; }
+void Text::appendText(const string& new_text) {
+    if (lines.empty()) {
+        startNewLine();
+    }
+    lines.back()->append(new_text);
+    cursor_line = lines.size() - 1;
+    cursor_pos = lines.back()->length();
+}
+
+void Text::insertText(int line_idx, int char_idx, const string& insert_str) {
+    if (line_idx >= 0 && line_idx < lines.size()) {
+        lines[line_idx]->insert(char_idx, insert_str);
+    } else {
+        cout << "err: line index out of range.\n";
+    }
+}
+void Text::insertReplaceText(int line_idx, int char_idx, const string& insert_str) {
+    if (line_idx >= 0 && line_idx < lines.size()) {
+        lines[line_idx]->insertReplace(char_idx, insert_str);
+    }
+}
+void Text::deleteText(int line_idx, int char_idx, int char_count) {
+    if (line_idx >= 0 && line_idx < lines.size()) {
+        lines[line_idx]->remove(char_idx, char_count);
+    } else {
+        cout << "err: line index out of range.\n";
+    }
+}
+
+void Text::searchText(const string& search_str) const {
+    bool found_any = false;
+    for (size_t i = 0; i < lines.size(); ++i) {
+        size_t pos = 0;
+        while (lines[i]->contains(search_str, pos)) {
+            cout << "text is present in this position: " << i << " " << pos << "\n";
+            found_any = true;
+            pos += search_str.length();
+        }
+    }
+    if (!found_any) {
+        cout << "not found\n";
+    }
+}
+
+string Text::copyText(int line_idx, int char_idx, int count) const {
+    if (line_idx >= 0 && line_idx < lines.size()) {
+        return lines[line_idx]->extract(char_idx, count);
+    }
+    return "";
+}
