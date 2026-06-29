@@ -16,7 +16,17 @@ public:
 
     Text(const Text& other);
 
-    Text& operator=(const Text& other) = delete;
+    Text& operator=(const Text& other) {
+        if (this != &other) {
+            lines.clear();
+            cursor_line = other.cursor_line;
+            cursor_pos = other.cursor_pos;
+            for (const auto& line : other.lines) {
+                lines.push_back(line->clone());
+            }
+        }
+        return *this;
+    }
 
     void startNewLine();
     void addLine(std::unique_ptr<Line> line);
