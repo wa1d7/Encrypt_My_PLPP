@@ -1,7 +1,4 @@
-﻿
-#ifndef ENCRYPT_TEXT_H
-#define ENCRYPT_TEXT_H
-#ifndef TEXT_H
+﻿#ifndef TEXT_H
 #define TEXT_H
 
 #include "line.h"
@@ -38,7 +35,9 @@ public:
     void deleteText(int line_idx, int char_idx, int char_count);
     void searchText(const std::string& search_str) const;
     std::string copyText(int line_idx, int char_idx, int count) const;
+
+    std::string serialize() const;
+    static Text deserialize(const std::string& data);
 };
 
 #endif // TEXT_H
-#endif //ENCRYPT_TEXT_H

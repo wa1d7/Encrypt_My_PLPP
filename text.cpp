@@ -1,5 +1,5 @@
 ﻿#include "text.h"
-
+#include <sstream>
 using namespace std;
 
 Text::Text() : cursor_line(0), cursor_pos(0) {}
@@ -113,4 +113,25 @@ string Text::copyText(int line_idx, int char_idx, int count) const {
         return lines[line_idx]->extract(char_idx, count);
     }
     return "";
+}
+
+string Text::serialize() const {
+    string full_data;
+    for (const auto& line : lines) {
+        full_data += line->serialize() + "\n";
+    }
+    return full_data;
+}
+
+Text Text::deserialize(const string& data) {
+    Text new_text;
+    stringstream ss(data);
+    string line_data;
+
+    while (getline(ss, line_data)) {
+        if (!line_data.empty()) {
+            new_text.addLine(Line::deserialize(line_data));
+        }
+    }
+    return new_text;
 }
