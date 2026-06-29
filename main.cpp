@@ -1,55 +1,36 @@
+#include "text_editor.h"
 #include <iostream>
-#include "include/cipher_api.h"
+
 int main() {
-    std::cout << "Encryption library test\n";
-    const char* message = "Hello, World!";
+    CipherLoader loader("cipher.dll");
+    TextEditor editor(&loader);
 
-    int caesar_key = 3;
-    cipher_t* caesar = cipher_create_caesar(caesar_key);
+    std::string cmd;
+    std::cout << "editor commands: append, undo, save, load, print, exit" << std::endl;
 
-    char* enc_caesar = cipher_encrypt(caesar, message);
-    char* dec_caesar = cipher_decrypt(caesar, enc_caesar);
+    while (true) {
+        std::cout << "> ";
+        std::cin >> cmd;
 
-    std::cout << "caesar cipher - key: " << caesar_key << "\n";
-    std::cout << "original:  " << message << "\n";
-    std::cout << "encrypted: " << enc_caesar << "\n";
-    std::cout << "decrypted: " << dec_caesar << "\n";
+        if (cmd == "exit") break;
 
-    cipher_free(enc_caesar);
-    cipher_free(dec_caesar);
-    cipher_destroy(caesar);
-
-
-    const char* vigenere_key = "KEY";
-    cipher_t* vigenere = cipher_create_vigenere(vigenere_key);
-
-    char* enc_vig = cipher_encrypt(vigenere, message);
-    char* dec_vig = cipher_decrypt(vigenere, enc_vig);
-
-    std::cout << "vigenere cipher - key: " << vigenere_key << "\n";
-    std::cout << "original:  " << message << "\n";
-    std::cout << "encrypted: " << enc_vig << "\n";
-    std::cout << "decrypted: " << dec_vig << "\n";
-
-    cipher_free(enc_vig);
-    cipher_free(dec_vig);
-    cipher_destroy(vigenere);
-
-
-    cipher_t* atbash = cipher_create_atbash();
-
-    char* enc_atbash = cipher_encrypt(atbash, message);
-    char* dec_atbash = cipher_decrypt(atbash, enc_atbash);
-
-    std::cout << "atbash cipher - bonus ball\n";
-    std::cout << "original:  " << message << "\n";
-    std::cout << "encrypted: " << enc_atbash << "\n";
-    std::cout << "decrypted: " << dec_atbash << "\n\n";
-
-    cipher_free(enc_atbash);
-    cipher_free(dec_atbash);
-    cipher_destroy(atbash);
-
+        if (cmd == "append") {
+            std::string text;
+            std::getline(std::cin >> std::ws, text);
+            editor.append(text);
+        } else if (cmd == "undo") {
+            editor.undo();
+        } else if (cmd == "print") {
+            editor.print();
+        } else if (cmd == "save") {
+            std::string path, key;
+            std::cin >> path >> key;
+            editor.saveToFile(path, key);
+        } else if (cmd == "load") {
+            std::string path, key;
+            std::cin >> path >> key;
+            editor.loadFromFile(path, key);
+        }
+    }
     return 0;
-
 }

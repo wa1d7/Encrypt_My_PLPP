@@ -27,3 +27,14 @@ void TextEditor::saveToFile(const std::string& filename, const std::string& key)
     std::ofstream out(filename, std::ios::binary);
     out << encrypted;
 }
+void TextEditor::loadFromFile(const std::string& filename, const std::string& key) {
+    std::ifstream in(filename, std::ios::binary);
+    if (!in) throw std::runtime_error("сould not open file for loading");
+
+    std::string encrypted((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    std::string decrypted = cipher->decryptText(encrypted, key);
+    current_text = Text::deserialize(decrypted);
+}
+void TextEditor::print() const {
+    current_text.printText();
+}

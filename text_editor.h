@@ -23,7 +23,7 @@ public:
     void redo();
     void copy(int line, int pos, int count);
     void paste(int line, int pos);
-    
+    void print() const;
 
     void saveToFile(const std::string& filename, const std::string& key);
     void loadFromFile(const std::string& filename, const std::string& key);
