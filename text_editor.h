@@ -6,10 +6,15 @@
 #include <vector>
 #include <stack>
 
-class TextEditor {
-    Text current_text;
+struct Tab {
+    Text text;
     std::stack<Text> undo_stack;
     std::stack<Text> redo_stack;
+};
+
+class TextEditor {
+    std::vector<Tab> tabs;
+    int active_tab;
     std::string clipboard;
     CipherLoader* cipher;
 
@@ -18,12 +23,15 @@ class TextEditor {
 public:
     TextEditor(CipherLoader* c);
 
+    void newTab();
+    void switchTab(int index);
+    void closeTab(int index);
+    void listTabs() const;
+
     void append(const std::string& str);
     void undo();
     void redo();
     void print() const;
-    void encryptDocument(const std::string& key, CipherType type);
-    void decryptDocument(const std::string& key, CipherType type);
 
     void insertNewLine();
     void copy(int count);
@@ -34,6 +42,9 @@ public:
     int getCursorPos() const;
     void insertText(const std::string& text);
     void deleteText(int char_count);
+
+    void encryptDocument(const std::string& key, CipherType type);
+    void decryptDocument(const std::string& key, CipherType type);
 
     void saveToFile(const std::string& filename, const std::string& key, CipherType type);
     void loadFromFile(const std::string& filename, const std::string& key, CipherType type);

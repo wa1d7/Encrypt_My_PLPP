@@ -3,7 +3,7 @@
 #include <string>
 
 CipherType getCipherType() {
-    std::cout << "?hoose cipher (1: vigenere, 2: caesar, 3: atbash): ";
+    std::cout << "Choose cipher (1: Vigenere, 2: Caesar, 3: Atbash): ";
     int choice;
     std::cin >> choice;
     if (choice == 2) return CipherType::CAESAR;
@@ -16,8 +16,10 @@ int main() {
     TextEditor editor(&loader);
 
     std::string cmd;
-    std::cout << "available commands: print, append, move <l> <p>, insert <text>,\n"
-              << "newline, encrypt, decrypt, del <count>, copy <count>, paste, undo, save, load, exit\n";
+    std::cout << "Available commands:\n"
+              << "[Text]: print, append, move <l> <p>, insert <text>, newline, del <count>, copy <count>, paste\n"
+              << "[Tabs]: tabnew, tabs, tabswitch <id>, tabclose <id>\n"
+              << "[File/Crypto]: encrypt, decrypt, save, load, undo, exit\n";
 
     while (true) {
         std::cout << "\n> ";
@@ -60,44 +62,61 @@ int main() {
             else if (cmd == "undo") {
                 editor.undo();
             }
-            // --- ????? ??????? ?? PDF ---
+            else if (cmd == "tabnew") {
+                editor.newTab();
+                std::cout << "New tab created.\n";
+                editor.listTabs();
+            }
+            else if (cmd == "tabs") {
+                editor.listTabs();
+            }
+            else if (cmd == "tabswitch") {
+                int idx; std::cin >> idx;
+                editor.switchTab(idx);
+            }
+            else if (cmd == "tabclose") {
+                int idx; std::cin >> idx;
+                editor.closeTab(idx);
+                editor.listTabs();
+            }
+
             else if (cmd == "encrypt") {
                 std::string key;
                 std::cout << "Key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.encryptDocument(key, type);
-                std::cout << "Document encrypted in memory!\n";
+                std::cout << "document encrypted in memory!\n";
             }
             else if (cmd == "decrypt") {
                 std::string key;
                 std::cout << "Key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.decryptDocument(key, type);
-                std::cout << "Document decrypted in memory!\n";
+                std::cout << "document decrypted in memory!\n";
             }
-            // -----------------------------
             else if (cmd == "save") {
                 std::string path, key;
-                std::cout << "File path: "; std::cin >> path;
-                std::cout << "Key: "; std::cin >> key;
+                std::cout << "file path: "; std::cin >> path;
+                std::cout << "key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.saveToFile(path, key, type);
-                std::cout << "Saved successfully!\n";
+                std::cout << "saved successfully!\n";
             }
             else if (cmd == "load") {
                 std::string path, key;
-                std::cout << "File path: "; std::cin >> path;
-                std::cout << "Key: "; std::cin >> key;
+                std::cout << "file path: "; std::cin >> path;
+                std::cout << "key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.loadFromFile(path, key, type);
-                std::cout << "Loaded successfully!\n";
+                std::cout << "loaded successfully!\n";
             }
             else {
-                std::cout << "Unknown command!\n";
+                std::cout << "unknown command!\n";
             }
         }
         catch (const std::exception& e) {
-            std::cout << "[ERROR] " << e.what() << "\n";
+            std::cout << "err " << e.what() << "\n";
         }
     }
+    return 0;
 }
