@@ -85,3 +85,29 @@ void TextEditor::paste() {
     saveState();
     current_text.insertText(getCursorLine(), getCursorPos(), clipboard);
 }
+void TextEditor::encryptDocument(const std::string& key, CipherType type) {
+    saveState();
+    // Получаем весь текст со всеми тегами (TEXT:, CONTACT: и тд)
+    std::string data = current_text.serialize();
+
+    // Шифруем
+    std::string encrypted = cipher->encryptText(data, key, type);
+
+    // Очищаем текущий документ и вставляем зашифрованный текст
+    current_text.clear();
+    current_text.appendText(encrypted);
+}
+
+void TextEditor::decryptDocument(const std::string& key, CipherType type) {
+    saveState();
+    std::string encrypted_data;
+    for (int i = 0; i < current_text.getLineCount(); ++i) {
+        const Line* line = current_text.getLine(i);
+        encrypted_data += line->extract(0, line->length());
+        if (i < current_text.getLineCount() - 1) encrypted_data += "\n";
+    }
+
+    std::string decrypted = cipher->decryptText(encrypted_data, key, type);
+
+    current_text = Text::deserialize(decrypted);
+}

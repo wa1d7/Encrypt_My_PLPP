@@ -17,7 +17,7 @@ int main() {
 
     std::string cmd;
     std::cout << "available commands: print, append, move <l> <p>, insert <text>,\n"
-              << "newline, del <count>, copy <count>, paste, undo, save, load, exit\n";
+              << "newline, encrypt, decrypt, del <count>, copy <count>, paste, undo, save, load, exit\n";
 
     while (true) {
         std::cout << "\n> ";
@@ -60,29 +60,44 @@ int main() {
             else if (cmd == "undo") {
                 editor.undo();
             }
+            // --- ????? ??????? ?? PDF ---
+            else if (cmd == "encrypt") {
+                std::string key;
+                std::cout << "Key: "; std::cin >> key;
+                CipherType type = getCipherType();
+                editor.encryptDocument(key, type);
+                std::cout << "Document encrypted in memory!\n";
+            }
+            else if (cmd == "decrypt") {
+                std::string key;
+                std::cout << "Key: "; std::cin >> key;
+                CipherType type = getCipherType();
+                editor.decryptDocument(key, type);
+                std::cout << "Document decrypted in memory!\n";
+            }
+            // -----------------------------
             else if (cmd == "save") {
                 std::string path, key;
-                std::cout << "file path: "; std::cin >> path;
-                std::cout << "key: "; std::cin >> key;
+                std::cout << "File path: "; std::cin >> path;
+                std::cout << "Key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.saveToFile(path, key, type);
-                std::cout << "saved successfully!\n";
+                std::cout << "Saved successfully!\n";
             }
             else if (cmd == "load") {
                 std::string path, key;
-                std::cout << "file path: "; std::cin >> path;
-                std::cout << "key: "; std::cin >> key;
+                std::cout << "File path: "; std::cin >> path;
+                std::cout << "Key: "; std::cin >> key;
                 CipherType type = getCipherType();
                 editor.loadFromFile(path, key, type);
-                std::cout << "loaded successfully!\n";
+                std::cout << "Loaded successfully!\n";
             }
             else {
-                std::cout << "inknown command!\n";
+                std::cout << "Unknown command!\n";
             }
         }
         catch (const std::exception& e) {
-            std::cout << "err " << e.what() << "\n";
+            std::cout << "[ERROR] " << e.what() << "\n";
         }
     }
-    return 0;
 }

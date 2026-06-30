@@ -22,6 +22,8 @@ public:
     void undo();
     void redo();
     void print() const;
+    void encryptDocument(const std::string& key, CipherType type);
+    void decryptDocument(const std::string& key, CipherType type);
 
     void insertNewLine();
     void copy(int count);
