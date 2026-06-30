@@ -135,3 +135,13 @@ Text Text::deserialize(const string& data) {
     }
     return new_text;
 }
+void Text::insertNewLine() {
+    if (lines.empty()) {
+        lines.push_back(std::make_unique<TextLine>(""));
+        cursor_line = 0;
+    } else {
+        lines.insert(lines.begin() + cursor_line + 1, std::make_unique<TextLine>(""));
+        cursor_line++;
+    }
+    cursor_pos = 0;
+}

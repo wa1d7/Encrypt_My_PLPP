@@ -1,7 +1,4 @@
-﻿//
-// Created by ignat on 13.07.2026.
-//
-
+﻿
 #include "line.h"
 
 using namespace std;
@@ -9,7 +6,7 @@ using namespace std;
 TextLine::TextLine(const string& t) : text(t) {}
 
 void TextLine::print() const {
-    cout << "Text: " << text << endl;
+    cout << "text: " << text << endl;
 }
 
 unique_ptr<Line> TextLine::clone() const {
@@ -44,7 +41,6 @@ string TextLine::extract(int char_idx, int count) const {
     }
     return "";
 }
-
 bool TextLine::contains(const string& query, size_t& pos) const {
     pos = text.find(query, pos);
     return pos != string::npos;

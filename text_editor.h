@@ -21,12 +21,20 @@ public:
     void append(const std::string& str);
     void undo();
     void redo();
-    void copy(int line, int pos, int count);
-    void paste(int line, int pos);
     void print() const;
 
-    void saveToFile(const std::string& filename, const std::string& key);
-    void loadFromFile(const std::string& filename, const std::string& key);
+    void insertNewLine();
+    void copy(int count);
+    void paste();
+
+    void setCursor(int line, int pos);
+    int getCursorLine() const;
+    int getCursorPos() const;
+    void insertText(const std::string& text);
+    void deleteText(int char_count);
+
+    void saveToFile(const std::string& filename, const std::string& key, CipherType type);
+    void loadFromFile(const std::string& filename, const std::string& key, CipherType type);
 };
 
 #endif

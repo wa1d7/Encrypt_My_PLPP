@@ -32,6 +32,7 @@ public:
     void addLine(std::unique_ptr<Line> line);
     void printText() const;
     void clear();
+    void insertNewLine();
 
     void setCursor(int line, int pos);
     int getCursorLine() const;
